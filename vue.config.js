@@ -1,3 +1,4 @@
+// https://cli.vuejs.org/zh/config/
 const path = require("path");
 // const webpack = require('webpack')
 // const fs = require("fs");
@@ -30,7 +31,48 @@ module.exports = {
   /*
    * webpack option, see https://github.com/vuejs/vue-cli/blob/dev/docs/guide/webpack.md
    */
-  chainWebpack: (config) => {},
+  chainWebpack: (config) => {
+    // 修复HMR
+    config.resolve.symlinks(true);
+
+    const cdn = {
+      // 访问https://unpkg.com/element-ui/lib/theme-chalk/index.css获取最新版本
+      css: ["//unpkg.com/element-ui@2.10.1/lib/theme-chalk/index.css"],
+      js: [
+        "//unpkg.com/vue@2.6.10/dist/vue.min.js", // 访问https://unpkg.com/vue/dist/vue.min.js获取最新版本
+        "//unpkg.com/vue-router@3.0.6/dist/vue-router.min.js",
+        "//unpkg.com/vuex@3.1.1/dist/vuex.min.js",
+        "//unpkg.com/axios@0.19.0/dist/axios.min.js",
+        "//unpkg.com/element-ui@2.10.1/lib/index.js",
+      ],
+    };
+
+    // 如果使用多页面打包，使用vue inspect --plugins查看html是否在结果数组中
+    config.plugin("html").tap((args) => {
+      // html中添加cdn
+      args[0].cdn = cdn;
+
+      // 修复 Lazy loading routes Error
+      args[0].chunksSortMode = "none";
+      return args;
+    });
+
+    // 防止多页面打包卡顿
+    // config => config.plugins.delete('named-chunks')
+
+    // 多页面cdn添加
+    // Object.keys(pagesInfo).forEach(page => {
+    //   config.plugin(`html-${page}`).tap(args => {
+    //     // html中添加cdn
+    //     args[0].cdn = cdn;
+
+    //     // 修复 Lazy loading routes Error
+    //     args[0].chunksSortMode = "none";
+    //     return args;
+    //   });
+    // })
+    return config;
+  },
   configureWebpack: (config) => {
     // const plugins = [];
     // config.externals = {
@@ -92,7 +134,7 @@ module.exports = {
     proxy: null,
     overlay: {
       // 全屏模式下是否显示脚本错误
-      warnings: false,
+      warnings: true,
       errors: true,
     },
     before: (app) => {},
