@@ -74,6 +74,18 @@ module.exports = {
     return config;
   },
   configureWebpack: (config) => {
+    config.resolve = { //配置解析别名
+      extensions: [".js", ".json", ".vue"],
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+        "public": path.resolve(__dirname, "./public"),
+        "components": path.resolve(__dirname, "./components"),
+        "common": path.resolve(__dirname, "./common"),
+        "api": path.resolve(__dirname, "./api"),
+        "views": path.resolve(__dirname, "./views"),
+        "data": path.resolve(__dirname, "./data"),
+      }
+    }
     // const plugins = [];
     // config.externals = {
     //   vue: "Vue",
