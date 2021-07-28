@@ -74,18 +74,19 @@ module.exports = {
     return config;
   },
   configureWebpack: (config) => {
-    config.resolve = { //配置解析别名
+    config.resolve = {
+      //配置解析别名
       extensions: [".js", ".json", ".vue"],
       alias: {
         "@": path.resolve(__dirname, "./src"),
-        "public": path.resolve(__dirname, "./public"),
-        "components": path.resolve(__dirname, "./components"),
-        "common": path.resolve(__dirname, "./common"),
-        "api": path.resolve(__dirname, "./api"),
-        "views": path.resolve(__dirname, "./views"),
-        "data": path.resolve(__dirname, "./data"),
-      }
-    }
+        public: path.resolve(__dirname, "./public"),
+        components: path.resolve(__dirname, "./components"),
+        common: path.resolve(__dirname, "./common"),
+        api: path.resolve(__dirname, "./api"),
+        views: path.resolve(__dirname, "./views"),
+        data: path.resolve(__dirname, "./data"),
+      },
+    };
     // const plugins = [];
     // config.externals = {
     //   vue: "Vue",
@@ -143,7 +144,15 @@ module.exports = {
     https: false, // 编译失败时刷新页面
     hot: true, // 开启热加载
     hotOnly: false, // 热更新
-    proxy: null,
+    proxy: {
+      "/devApi": {
+        target: "http://www.web-jshtml.cn/productapi",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/devApi": ""
+        }
+      }
+    },
     overlay: {
       // 全屏模式下是否显示脚本错误
       warnings: true,

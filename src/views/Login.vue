@@ -65,7 +65,8 @@
               ></el-input>
             </el-col>
             <el-col :span="9">
-              <el-button type="success" class="block">获取验证码</el-button>
+              <el-button type="success" @click="getSms()">获取验证码</el-button>
+              <!-- <el-button type="success" class="block">获取验证码</el-button> -->
             </el-col>
           </el-row>
         </el-form-item>
@@ -83,6 +84,8 @@
 </template>
 
 <script>
+// import service from "@/utils/request";
+import { GetSms } from "@/api/login";
 import { isEmail } from "@/utils/validate";
 
 export default {
@@ -167,13 +170,32 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           alert("submit!");
+          // service.get('/user?ID=12345')
+          //   .then(function (response) {
+          //     // 处理成功情况
+          //     console.log(response);
+          //   })
+          //   .catch(function (error) {
+          //     // 处理错误情况
+          //     console.log(error);
+          //   })
+          //   .then(function () {
+          //     // 总是会执行
+          //   });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
+    getSms() {
+      let data = {
+        username: this.ruleForm.accout,
+      };
+      GetSms(data);
+    },
   },
+  created() {},
 };
 </script>
 <style lang="scss" scoped>
